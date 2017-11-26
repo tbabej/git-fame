@@ -9,6 +9,7 @@ import os
 import docopt
 import git
 
+DATETIME_FORMAT = '%Y-%m-%d %H:%M:%S %z'
 
 def record_shadow_commit(shadow_repo, commit):
     """
@@ -26,8 +27,8 @@ def record_shadow_commit(shadow_repo, commit):
         commit.hexsha,
         author=commit.author,
         committer=commit.committer,
-        author_date=str(commit.authored_date),
-        commit_date=str(commit.committed_date)
+        author_date=commit.authored_datetime.strftime(DATETIME_FORMAT),
+        commit_date=commit.committed_datetime.strftime(DATETIME_FORMAT)
     )
 
 args = docopt.docopt(__doc__)
