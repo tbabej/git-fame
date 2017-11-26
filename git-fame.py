@@ -9,6 +9,27 @@ import os
 import docopt
 import git
 
+
+def record_shadow_commit(shadow_repo, commit):
+    """
+    Creates a shadow commit in the shadow repo. The actual file content change
+    is the commit's hexsha added to the COMMITS file.
+    """
+
+    tree_dir = shadow_repo._working_tree_dir
+    commits_file = os.path.join(tree_dir, 'COMMITS')
+
+    with open(commits_file, 'a') as f:
+        f.write(commit.hexsha)
+
+    shadow_repo.index.commit(
+        commit.hexsha,
+        author=commit.author,
+        committer=commit.committer,
+        author_date=str(commit.authored_date),
+        commit_date=str(commit.committed_date)
+    )
+
 args = docopt.docopt(__doc__)
 
 # Intialize both repos
@@ -19,4 +40,4 @@ source_repo = git.Repo(source_path)
 target_repo = git.Repo(target_path)
 
 for commit in source_repo.iter_commits('master'):
-    print(commit)
+    record_shadow_commit(target_repo, commit)
