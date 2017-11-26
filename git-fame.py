@@ -21,7 +21,7 @@ def record_shadow_commit(shadow_repo, commit):
     commits_file = os.path.join(tree_dir, 'COMMITS')
 
     with open(commits_file, 'a') as f:
-        f.write(commit.hexsha)
+        f.write(commit.hexsha + '\n')
 
     shadow_repo.index.commit(
         commit.hexsha,
