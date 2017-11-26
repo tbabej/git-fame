@@ -40,5 +40,13 @@ target_path = os.path.expanduser(args['<target>'])
 source_repo = git.Repo(source_path)
 target_repo = git.Repo(target_path)
 
+tree_dir = target_repo._working_tree_dir
+commits_file = os.path.join(tree_dir, 'COMMITS')
+
+pathlib.Path(commits_file).touch()
+with open(commits_file, 'r') as f:
+    recorded_commits = set([line.strip() for line in f.readlines()])
+
 for commit in source_repo.iter_commits('master'):
-    record_shadow_commit(target_repo, commit)
+    if commit.hexsha not in recorded_commits:
+        record_shadow_commit(target_repo, commit)
