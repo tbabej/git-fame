@@ -5,6 +5,8 @@ Usage: git-fame <source> <target>
 """
 
 import os
+import pathlib
+import subprocess
 
 import docopt
 import git
