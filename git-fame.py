@@ -23,6 +23,15 @@ def record_shadow_commit(shadow_repo, commit):
     with open(commits_file, 'a') as f:
         f.write(commit.hexsha + '\n')
 
+    args = [
+        'git',
+        '--git-dir', os.path.join(shadow_repo._working_tree_dir, '.git'),
+        '--work-tree', shadow_repo._working_tree_dir,
+        'add',
+        os.path.join(shadow_repo._working_tree_dir, 'COMMITS')
+    ]
+    subprocess.check_call(args)
+
     shadow_repo.index.commit(
         commit.hexsha,
         author=commit.author,
