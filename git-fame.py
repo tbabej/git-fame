@@ -61,3 +61,11 @@ with open(commits_file, 'r') as f:
 for commit in source_repo.iter_commits('master'):
     if commit.hexsha not in recorded_commits:
         record_shadow_commit(target_repo, commit)
+
+args = [
+    'git',
+    '--git-dir', os.path.join(target_repo._working_tree_dir, '.git'),
+    '--work-tree', target_repo._working_tree_dir,
+    'push'
+]
+subprocess.check_call(args)
