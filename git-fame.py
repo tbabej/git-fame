@@ -58,7 +58,7 @@ pathlib.Path(commits_file).touch()
 with open(commits_file, 'r') as f:
     recorded_commits = set([line.strip() for line in f.readlines()])
 
-for commit in source_repo.iter_commits('master'):
+for commit in reversed(list(source_repo.iter_commits('origin/master'))):
     if commit.hexsha not in recorded_commits:
         record_shadow_commit(target_repo, commit)
 
